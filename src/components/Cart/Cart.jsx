@@ -1,11 +1,14 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import classes from "./Cart.module.css";
 import Modal from "../UI/Modal";
 import CartContext from "../../store/cart-context";
 import CartItem from "./CartItem";
+import Checkout from "../Cart/Checkout";
 
 const Cart = (props) => {
   const cartCtx = useContext(CartContext);
+  const [isCheckout, setIsCheckout] = useState(false);
+
   const cartItemRemoveHandler = (id) => {
     cartCtx.removeItem(id);
   };
@@ -27,6 +30,29 @@ const Cart = (props) => {
     </ul>
   );
 
+  // const handleSubmitOrder=async ()=>{
+  //   try {
+  //     const response = await fetch(
+  //       "https://food-order-f3c82-default-rtdb.europe-west1.firebasedatabase.app/orders",
+  //       {
+  //         method: "POST",
+  //         body: JSON.stringify(cartCtx.items),
+  //         header: { "Content-type": "application/json" },
+  //       }
+  //     );
+  //   }catch{}
+  // }
+  const orderOnClickedHanlder = () => {
+    setIsCheckout(true);
+  };
+
+  const modalActions = (
+    <div className={classes.actions}>
+      <button onClick={props.onHideCart}>Close</button>
+      <button onClick={orderOnClickedHanlder}>Order</button>
+    </div>
+  );
+
   return (
     <Modal onClose={props.onHideCart}>
       {cartItems}
@@ -34,10 +60,8 @@ const Cart = (props) => {
         <span>Total Amount</span>
         <span>{cartCtx.totalAmount}</span>
       </div>
-      <div className={classes.actions}>
-        <button onClick={props.onHideCart}>Close</button>
-        <button onClick={props.onHideCart}>Order</button>
-      </div>
+      {isCheckout && <Checkout />}
+      {!isCheckout && modalActions}
     </Modal>
   );
 };
