@@ -11,9 +11,7 @@ const AvailableMeals = () => {
   const fetchMealsData = async () => {
     setIsLoading(true);
     try {
-      const response = await fetch(
-        "https://food-order-f3c82-default-rtdb.europe-west1.firebasedatabase.app/meals.json"
-      );
+      const response = await fetch(process.env.REACT_APP_DISHES);
       if (!response.ok) {
         throw new Error("error in fetch");
       }
@@ -23,15 +21,15 @@ const AvailableMeals = () => {
       for (const key in data) {
         const meal = {
           id: key,
-          name: data[key].name,
+          name: data[key].title,
           description: data[key].description,
           price: data[key].price,
+          image: data[key].image,
         };
         loadedMeals.push(meal);
       }
       setMeals(loadedMeals);
     } catch (err) {
-      console.log(err);
       setError(err.message);
     } finally {
       setIsLoading(false);
@@ -64,6 +62,7 @@ const AvailableMeals = () => {
       name={meal.name}
       description={meal.description}
       price={meal.price}
+      image={meal.image}
     />
   ));
   return (

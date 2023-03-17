@@ -1,7 +1,8 @@
 .meals {
-  width: 90%;
-  max-width: 60rem;
-  margin: 2rem auto;
+  width: 100%;
+  margin: 0 auto;
+  padding: 2rem 10%;
+  background-color: bisque;
   animation: meals-appear 1s ease-out forwards;
 }
 .meals ul {
@@ -15,7 +16,7 @@
 }
 .mealsError {
   text-align: center;
-  color:red
+  color: red;
 }
 
 @keyframes meals-appera {

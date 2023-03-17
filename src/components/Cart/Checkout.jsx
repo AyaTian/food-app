@@ -1,127 +1,99 @@
-import React from "react";
-import useInput from "../../hooks/use-input";
+import React, { useRef, useState } from "react";
 import classes from "./Checkout.module.css";
 
+const isEmpty = (value) => value.trim() === "";
+const isSixChart = (value) => value.trim().length === 6;
+
 const Checkout = (props) => {
-  const {
-    value: nameInputValue,
-    isValid: nameInputIsValid,
-    hasError: nameInputHasError,
-    valueChangeHandler: nameValueChangeHandler,
-    inputBlurHandler: nameInputBlurHandler,
-    reset: nameInputReset,
-  } = useInput((value) => value.trim() !== "");
+  const [formInputsValidity, setFormInputsValidity] = useState({
+    name: true,
+    street: true,
+    postCode: true,
+    phone: true,
+  });
 
-  const {
-    value: streetInputValue,
-    isValid: streetInputIsValid,
-    hasError: streetInputHasError,
-    valueChangeHandler: streetValueChangeHandler,
-    inputBlurHandler: streetInputBlurHandler,
-    reset: streetInputReset,
-  } = useInput((value) => value.trim() !== "");
-  const {
-    value: postCodeInputValue,
-    isValid: postCodeInputIsValid,
-    hasError: postCodeInputHasError,
-    valueChangeHandler: postCodeValueChangeHandler,
-    inputBlurHandler: postCodeInputBlurHandler,
-    reset: postCodeInputReset,
-  } = useInput((value) => value.trim() !== "" && value.length < 7);
-  const {
-    value: phoneInputValue,
-    isValid: phoneInputIsValid,
-    hasError: phoneInputHasError,
-    valueChangeHandler: phoneValueChangeHandler,
-    inputBlurHandler: phoneInputBlurHandler,
-    reset: phoneInputReset,
-  } = useInput((value) => value.trim() !== "");
+  const nameInputRef = useRef();
+  const streetInputRef = useRef();
+  const postCodeInputRef = useRef();
+  const phoneInputRef = useRef();
 
-  let formIsValid = false;
-  if (
-    nameInputIsValid &&
-    streetInputIsValid &&
-    postCodeInputIsValid &&
-    phoneInputIsValid
-  ) {
-    formIsValid = true;
-  }
   const handleConfirm = (event) => {
     event.preventDefault();
+
+    const nameInputIsValid = !isEmpty(nameInputRef.current.value);
+    const streetInputIsValid = !isEmpty(streetInputRef.current.value);
+    const postCodeInputIsValid = isSixChart(postCodeInputRef.current.value);
+    const phoneInputIsValid = !isEmpty(nameInputRef.current.value);
+
+    setFormInputsValidity({
+      name: nameInputIsValid,
+      street: streetInputIsValid,
+      postCode: postCodeInputIsValid,
+      phone: phoneInputIsValid,
+    });
+
+    let formIsValid = false;
+    if (
+      nameInputIsValid &&
+      streetInputIsValid &&
+      postCodeInputIsValid &&
+      phoneInputIsValid
+    ) {
+      formIsValid = true;
+    }
+
     if (!formIsValid) {
       return;
-    } else {
-      nameInputReset();
-      streetInputReset();
-      postCodeInputReset();
-      phoneInputReset();
     }
+    // Send call
+    props.onConfirm({
+      name: nameInputRef.current.value,
+      street: streetInputRef.current.value,
+      postCode: postCodeInputRef.current.value,
+      phone: phoneInputRef.current.value,
+    });
   };
 
   const nameControlClasses = `${classes.control} ${
-    nameInputIsValid ? "" : classes.invalid
+    formInputsValidity.name ? "" : classes.invalid
   }`;
   const streetControlClasses = `${classes.control} ${
-    streetInputIsValid ? "" : classes.invalid
+    formInputsValidity.street ? "" : classes.invalid
   }`;
   const postalCodeControlClasses = `${classes.control} ${
-    postCodeInputIsValid ? "" : classes.invalid
+    formInputsValidity.street ? "" : classes.invalid
   }`;
   const phoneControlClasses = `${classes.control} ${
-    phoneInputIsValid ? "" : classes.invalid
+    formInputsValidity.phone ? "" : classes.invalid
   }`;
 
   return (
     <form onSubmit={handleConfirm} className={classes.form}>
       <div className={nameControlClasses}>
         <label htmlFor="name">Name</label>
-        <input
-          id="name"
-          type="text"
-          value={nameInputValue}
-          onBlur={nameInputBlurHandler}
-          onChange={nameValueChangeHandler}
-        />
-        {nameInputHasError && (
+        <input id="name" type="text" ref={nameInputRef} />
+        {!formInputsValidity.name && (
           <p className="error-text">Please input your first name</p>
         )}
       </div>
       <div className={streetControlClasses}>
         <label htmlFor="street">Street</label>
-        <input
-          id="street"
-          type="text"
-          value={streetInputValue}
-          onBlur={streetInputBlurHandler}
-          onChange={streetValueChangeHandler}
-        />
-        {streetInputHasError && (
+        <input id="street" type="text" ref={streetInputRef} />
+        {!formInputsValidity.street && (
           <p className="error-text">Please input your name</p>
         )}
       </div>
       <div className={postalCodeControlClasses}>
         <label htmlFor="postCode">Post Code</label>
-        <input
-          id="postCode"
-          type="text"
-          value={postCodeInputValue}
-          onBlur={postCodeInputBlurHandler}
-          onChange={postCodeValueChangeHandler}
-        />
-        {postCodeInputHasError && (
+        <input id="postCode" type="text" ref={postCodeInputRef} />
+        {!formInputsValidity.postCode && (
           <p className="error-text">Please input your post code</p>
         )}
       </div>
       <div className={phoneControlClasses}>
         <label htmlFor="">Phone</label>
-        <input
-          id="phone"
-          type="text"
-          value={phoneInputValue}
-          onBlur={phoneInputBlurHandler}
-          onChange={phoneValueChangeHandler}
-        />
-        {phoneInputHasError && (
+        <input id="phone" type="text" ref={phoneInputRef} />
+        {!formInputsValidity.phone && (
           <p className="error-text">Please input your phone</p>
         )}
       </div>

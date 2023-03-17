@@ -5,6 +5,21 @@
   padding-bottom: 1rem;
   border-bottom: 1px solid #ccc;
 }
+.meal .info {
+  width: 70%;
+  display: flex;
+  justify-content: start;
+}
+
+.meal .photo {
+  width: 150px;
+  height: 100px;
+  padding: 0.5rem;
+}
+.meal .content {
+  padding: 0.5rem;
+}
+
 .meal h3 {
   margin: 0 0 0.25rem 0;
 }

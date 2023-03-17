@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 
 const CartItemListContext = React.createContext({
   items: [],
@@ -8,5 +8,3 @@ const CartItemListContext = React.createContext({
 });
 
 export default CartItemListContext;
-
-

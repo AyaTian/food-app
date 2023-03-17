@@ -1,7 +1,8 @@
 .form {
   margin: 1rem 0;
-  height: 19rem;
+  height: 20rem;
   overflow: auto;
+  box-sizing: border-box;
 }
 
 .control {
@@ -18,7 +19,7 @@
   font: inherit;
   border: 1px solid #ccc;
   border-radius: 4px;
-  width: 20rem;
+  width: 30rem;
   max-width: 100%;
 }
 
@@ -26,6 +27,7 @@
   display: flex;
   justify-content: flex-end;
   gap: 1rem;
+  margin-top: 1rem;
 }
 
 .actions button {
@@ -35,7 +37,7 @@
   background-color: transparent;
   border: none;
   border-radius: 25px;
-  padding: 0.5rem 2rem; 
+  padding: 0.5rem 2rem;
 }
 
 .actions button:hover,
